@@ -41,6 +41,7 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
     }
 
     var http = httpClientFactory.CreateClient("github");
+    http.DefaultRequestHeaders.UserAgent.ParseAdd("BookFromHub-App");
 
     // Step 2: Call GitHub API to list repo contents
     List<GitHubFile> mdFiles;
