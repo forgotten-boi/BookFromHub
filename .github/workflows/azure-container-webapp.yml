@@ -23,8 +23,8 @@ jobs:
       # 3️⃣ Build and push Docker image
       - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/forgotten-boi/bookhub:latest .
-          docker push ghcr.io/forgotten-boi/bookhub:latest
+          docker build -t ghcr.io/forgotten-boi/bookforhub:latest .
+          docker push ghcr.io/forgotten-boi/bookforhub:latest
 
       # 4️⃣ Log in to Azure (for deployment)
       - name: Log in to Azure
@@ -41,4 +41,4 @@ jobs:
             az containerapp update \
               --name BookHub \
               --resource-group Az-Certification \
-              --image ghcr.io/forgotten-boi/bookhub:latest
+              --image ghcr.io/forgotten-boi/bookforhub:latest
