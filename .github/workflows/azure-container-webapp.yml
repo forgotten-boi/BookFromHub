@@ -39,13 +39,23 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # 5️⃣ Deploy to Azure Container App
+       # for container app, use this az containerapp update \
+           #   --name BookHub \
+            #  --resource-group Az-Certification \
+            #  --image "$IMAGE_NAME"
+      # 5️⃣ Deploy to Azure Container Instance
       - name: Deploy to Azure Container App
         uses: azure/cli@v1
         with:
           azcliversion: 2.72.0
           inlineScript: |
-            az containerapp update \
+           az container create \
               --name BookHub \
               --resource-group Az-Certification \
-              --image "$IMAGE_NAME"
+              --image "$IMAGE_NAME" \
+              --cpu 1 \
+              --memory 1.5 \
+              --restart-policy Always \
+              --dns-name-label bookhub \
+              --ports 80
+          
