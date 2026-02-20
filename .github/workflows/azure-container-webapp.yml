@@ -19,7 +19,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: nishrepo/bookfromhub:latest
+          tags:  nishrepo.azurecr.io/bookfromhub:latest
 
       - name: Deploy to Azure Container App
         uses: azure/cli@v1
