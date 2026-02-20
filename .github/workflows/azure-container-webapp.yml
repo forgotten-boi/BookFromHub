@@ -58,5 +58,5 @@ jobs:
               --os-type Linux \
               --restart-policy Always \
               --dns-name-label bookhub \
-              --ports 80
+              --ports 8080
           
