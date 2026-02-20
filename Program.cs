@@ -4,10 +4,15 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHttpClient("github", client =>
+builder.Services.AddHttpClient("github", (sp, client) =>
 {
     client.DefaultRequestHeaders.Add("User-Agent", "BookFromHub/1.0");
     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+    // Optional token to raise rate limit from 60 → 5 000 req/hr
+    var token = sp.GetRequiredService<IConfiguration>()["GitHub:Token"];
+    if (!string.IsNullOrWhiteSpace(token))
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 });
 
 var app = builder.Build();
@@ -43,6 +48,15 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
     {
         var apiUrl = $"https://api.github.com/repos/{owner}/{repo}/contents";
         var response = await http.GetAsync(apiUrl);
+
+        if ((int)response.StatusCode == 429 ||
+            (response.StatusCode == System.Net.HttpStatusCode.Forbidden &&
+             response.Headers.TryGetValues("X-RateLimit-Remaining", out var rem) &&
+             rem.FirstOrDefault() == "0"))
+        {
+            return Results.Problem(RateLimitMessage(response), statusCode: 429);
+        }
+
         if (!response.IsSuccessStatusCode)
             return Results.Problem($"GitHub API error: {response.StatusCode}", statusCode: 500);
 
@@ -130,6 +144,17 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
 });
 
 app.Run();
+
+static string RateLimitMessage(HttpResponseMessage response)
+{
+    var resetMsg = string.Empty;
+    if (response.Headers.TryGetValues("X-RateLimit-Reset", out var vals) &&
+        long.TryParse(vals.FirstOrDefault(), out var ts))
+    {
+        resetMsg = $" Resets at {DateTimeOffset.FromUnixTimeSeconds(ts):HH:mm:ss} UTC.";
+    }
+    return $"GitHub API rate limit exceeded.{resetMsg} Provide a GitHub token via the GitHub__Token environment variable to increase the limit.";
+}
 
 record GenerateRequest([property: JsonPropertyName("repoUrl")] string RepoUrl);
 
