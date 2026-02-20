@@ -50,7 +50,7 @@ jobs:
           azcliversion: 2.72.0
           inlineScript: |
            az container create \
-              --name BookHub \
+              --name bookhub \
               --resource-group Az-Certification \
               --image "$IMAGE_NAME" \
               --cpu 1 \
