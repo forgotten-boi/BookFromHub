@@ -1,0 +1,10 @@
+@BookFromHub_HostAddress = http://localhost:5014
+
+POST {{BookFromHub_HostAddress}}/generate
+Content-Type: application/json
+
+{
+  "repoUrl": "https://github.com/user/repo"
+}
+
+###
