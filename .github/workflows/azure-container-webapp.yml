@@ -44,7 +44,7 @@ jobs:
             #  --resource-group Az-Certification \
             #  --image "$IMAGE_NAME"
       # 5️⃣ Deploy to Azure Container Instance
-      - name: Deploy to Azure Container App
+      - name: Deploy to Azure Container Instance
         uses: azure/cli@v1
         with:
           azcliversion: 2.72.0
@@ -55,6 +55,7 @@ jobs:
               --image "$IMAGE_NAME" \
               --cpu 1 \
               --memory 1.5 \
+              --os-type Linux \
               --restart-policy Always \
               --dns-name-label bookhub \
               --ports 80
