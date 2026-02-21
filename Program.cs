@@ -33,7 +33,11 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
         if (segments.Length < 2)
             return Results.BadRequest("Invalid GitHub repository URL.");
         owner = segments[0];
-        repo = segments[1];
+        if(segments[1].EndsWith(".git", StringComparison.OrdinalIgnoreCase))
+            repo = segments[1].Substring(0, segments[1].Length - 4);
+        else
+            repo = segments[1];
+
     }
     catch
     {
@@ -108,9 +112,8 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
 
     try
     {
-        // await File.WriteAllTextAsync(mdPath, combined, Encoding.UTF8);
-        var safeContent = RemoveUnsupportedUnicode(combined);
-        await File.WriteAllTextAsync(mdPath, safeContent, Encoding.UTF8);
+        await File.WriteAllTextAsync(mdPath, combined, Encoding.UTF8);
+       
         // Step 7: Run Pandoc
         var psi = new ProcessStartInfo
         {
