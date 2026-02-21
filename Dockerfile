@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       texlive-fonts-recommended \
       texlive-latex-extra \
       lmodern \
+      fonts-dejavu \
       fonts-noto-color-emoji \
  && rm -rf /var/lib/apt/lists/*
 
