@@ -10,16 +10,17 @@ RUN dotnet publish -c Release -o /app/publish --no-self-contained
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 
 # Install Pandoc + minimal LaTeX engine + required fonts
-RUN apt-get update && apt-get install -y --no-install-recommends \
-      pandoc \
-      texlive-xetex \
-      texlive-latex-recommended \
-      texlive-fonts-recommended \
-      texlive-latex-extra \
-      lmodern \
-      fonts-dejavu \
-      fonts-noto-color-emoji \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    pandoc \
+    texlive-xetex \
+    texlive-fonts-recommended \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-lang-english \
+    fonts-texgyre \
+    fonts-jetbrains-mono \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
