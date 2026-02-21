@@ -115,15 +115,36 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
         await File.WriteAllTextAsync(mdPath, combined, Encoding.UTF8);
        
         // Step 7: Run Pandoc
-        var psi = new ProcessStartInfo
-        {
-            FileName = "pandoc",
-            Arguments = $"\"{mdPath}\" -o \"{pdfPath}\" --toc --pdf-engine=xelatex -V mainfont=\"DejaVu Sans\"",
-            // Arguments = $"\"{mdPath}\" -o \"{pdfPath}\" --toc --pdf-engine=xelatex",
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
+       // Step 7: Run Pandoc
+var psi = new ProcessStartInfo
+{
+    FileName = "pandoc",
+    Arguments = $@"
+        ""{mdPath}"" 
+        -o ""{pdfPath}"" 
+        --standalone 
+        --toc 
+        --toc-depth=3 
+        --number-sections 
+        --top-level-division=chapter 
+        --pdf-engine=xelatex 
+        -V documentclass=book 
+        -V classoption=openany 
+        -V geometry:margin=1in 
+        -V papersize=a4 
+        -V fontsize=11pt 
+        -V linestretch=1.15 
+        -V mainfont=""TeX Gyre Pagella"" 
+        -V monofont=""JetBrains Mono"" 
+        -V colorlinks=true 
+        -V linkcolor=blue 
+        -V urlcolor=blue 
+        -V header-includes=""\\usepackage{{fancyhdr}}\\pagestyle{{fancy}}\\fancyhf{{}}\\fancyhead[L]{{{repo}}}\\fancyhead[R]{{\\leftmark}}\\fancyfoot[C]{{\\thepage}}""
+    ".Replace("\n", " "), // single-line argument string
+    RedirectStandardError = true,
+    UseShellExecute = false,
+    CreateNoWindow = true
+};
             // Arguments = $"\"{mdPath}\" -o \"{pdfPath}\" --toc",
 
         using var process = Process.Start(psi)
