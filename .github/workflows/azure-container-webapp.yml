@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/bookfromhub:latest
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/bookfromhub:v2
 
     steps:
       # 1️⃣ Checkout the repo
@@ -58,5 +58,5 @@ jobs:
               --os-type Linux \
               --restart-policy Always \
               --dns-name-label bookhub \
-              --ports 8080
+              --ports 80
           
