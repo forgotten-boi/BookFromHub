@@ -114,11 +114,12 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
         var psi = new ProcessStartInfo
         {
             FileName = "pandoc",
-            Arguments = $"\"{mdPath}\" -o \"{pdfPath}\" --toc",
+            Arguments = $"\"{mdPath}\" -o \"{pdfPath}\" --toc --pdf-engine=xelatex",
             RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
+            // Arguments = $"\"{mdPath}\" -o \"{pdfPath}\" --toc",
 
         using var process = Process.Start(psi)
             ?? throw new Exception("Failed to start pandoc process.");
