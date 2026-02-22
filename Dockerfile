@@ -28,9 +28,9 @@ WORKDIR /app
 # Copy published .NET app
 COPY --from=build /app/publish .
 
-# Listen on port 80
-ENV ASPNETCORE_URLS=http://+:80
-EXPOSE 80
+# Listen on port 8080 (Azure Container Apps default)
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 # Start the application
 ENTRYPOINT ["dotnet", "BookFromHub.dll"]
