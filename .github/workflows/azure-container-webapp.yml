@@ -51,5 +51,5 @@ jobs:
               --image "$IMAGE_NAME" \
               --min-replicas 0 \
               --max-replicas 3 \
-              --target-port 8080
+              --container-port 80
 
