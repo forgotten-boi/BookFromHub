@@ -46,7 +46,7 @@ jobs:
           azcliversion: 2.72.0
           inlineScript: |
              az containerapp update \
-                --name BookHub \
+                --name bookhub \
                 --resource-group Az-Certification \
                 --image "$IMAGE_NAME" \
                 --min-replicas 0 \
