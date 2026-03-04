@@ -102,8 +102,9 @@ app.MapPost("/generate", async (GenerateRequest req, IHttpClientFactory httpClie
         return Results.BadRequest("No downloadable markdown files found.");
 
     // Step 5: Concatenate with page breaks
-    var combined = string.Join("\n\n\\newpage\n\n", contentParts);
-
+   // var combined = string.Join("\n\n\\newpage\n\n", contentParts);
+    // Wrap page breaks in LaTeX raw blocks so Pandoc interprets them safely
+    var combined = string.Join("\n\n```{=latex}\n\\newpage\n```\n\n", contentParts);
     // Step 6: Write to temp file
     var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
     Directory.CreateDirectory(tempDir);
