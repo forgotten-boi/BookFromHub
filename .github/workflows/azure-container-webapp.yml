@@ -1,4 +1,4 @@
-name: Build & Deploy Markdown-to-PDF Container
+name: Build & Deploy Markdown-to-PDF Container App
 
 on:
   push:
@@ -39,24 +39,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-       # for container app, use this az containerapp update \
-           #   --name BookHub \
-            #  --resource-group Az-Certification \
-            #  --image "$IMAGE_NAME"
-      # 5️⃣ Deploy to Azure Container Instance
-      - name: Deploy to Azure Container Instance
+      # 5️⃣ Deploy to Azure Container App
+      - name: Deploy to Azure Container App
         uses: azure/cli@v1
         with:
           azcliversion: 2.72.0
           inlineScript: |
-           az container create \
-              --name bookhub \
+            az containerapp update \
+              --name BookHub \
               --resource-group Az-Certification \
               --image "$IMAGE_NAME" \
-              --cpu 1 \
-              --memory 1.5 \
-              --os-type Linux \
-              --restart-policy Always \
-              --dns-name-label bookhub \
-              --ports 80
-          
+              --min-replicas 0 \
+              --max-replicas 3 \
+              --target-port 8080
+
