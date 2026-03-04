@@ -45,11 +45,10 @@ jobs:
         with:
           azcliversion: 2.72.0
           inlineScript: |
-            az containerapp update \
-              --name BookHub \
-              --resource-group Az-Certification \
-              --image "$IMAGE_NAME" \
-              --min-replicas 0 \
-              --max-replicas 3 \
-              --container-port 80
+             az containerapp update \
+                --name BookHub \
+                --resource-group Az-Certification \
+                --image "$IMAGE_NAME" \
+                --min-replicas 0 \
+                --max-replicas 2
 
